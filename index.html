@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Cinematic Film</title>
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        overflow: hidden;
+        font-family: "Segoe UI", sans-serif;
+        color: white;
+    }
+
+    .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* START SCREEN ĐẸP HƠN */
+    .start-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, #111 0%, #000 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        animation: fadeIn 2s ease;
+    }
+
+    .title {
+        font-size: 32px;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeText 2s ease forwards;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: #aaa;
+        margin-bottom: 40px;
+        opacity: 0;
+        animation: fadeText 2s ease 1s forwards;
+    }
+
+    .start-btn {
+        padding: 14px 40px;
+        font-size: 16px;
+        border: 1px solid white;
+        background: transparent;
+        color: white;
+        cursor: pointer;
+        letter-spacing: 2px;
+        transition: all 0.4s ease;
+    }
+
+    .start-btn:hover {
+        background: white;
+        color: black;
+        box-shadow: 0 0 20px rgba(255,255,255,0.6);
+        transform: scale(1.05);
+    }
+
+    /* Hiệu ứng fade */
+    @keyframes fadeText {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* ẢNH */
+    .frame {
+        position: absolute;
+        bottom: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: all 2s ease;
+    }
+
+    .frame img {
+        width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .show {
+        bottom: 40%;
+        opacity: 1;
+    }
+
+    .fade-out {
+        opacity: 0;
+        bottom: 70%;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="container">
+
+    <div class="start-screen" id="startScreen">
+        <div class="title">Anh nhớ Em</div>
+        <div class="subtitle">Nhấn để bắt đầu</div>
+        <button class="start-btn" onclick="startExperience()">Bắt đầu</button>
+    </div>
+
+</div>
+
+<audio id="music" loop>
+  <source src="https://raw.githubusercontent.com/Rukkhadevata-Wisdom/T/main/l’amore%20dice%20ciao%20(piano%20cover)%20-%20emptiness.mp3">
+</audio>
+
+<script>
+const images = [
+    "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/76A77224-6184-4AEB-ABEF-BEA1F888B6E2.jpeg",
+    "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/IMG_2209.jpeg",
+    "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/IMG_2808.jpeg",
+    "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/IMG_2810.jpeg",
+    "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.C65t68cV0xLTCgJjy7BMMtA7-dJmcea3aH1OaUtyffg.png.jpeg",
+   "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.ErdksFBlkbSH7O5nVb6rC1SZ3VrIavANdXl_wSV1mHc.jpeg",
+   "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.U1F2Z2wYseWLGeOCbuWOviv5O1cOdzw6ugy6qQ9LCao.jpeg",
+   "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.bXsOePyp4dn3UW6FoCe9gSbR-uXT8FF2GxocrRQMTtY.jpeg",
+   "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.hwU43RWDfYbn_Rcb9Oyj6hyYItvlD3etpE6pnVDu-kc.png.jpeg",
+  "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.nEnGnA8YK7KJDG4PLXpGdmu1JusgE6CYxNfQ_MrQlv0.jpeg",
+   "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.phNzpiwtXkY5GiMCfC-rYxsVEAASmUNL9jDadNyp8l4.jpeg",
+   "https://raw.githubusercontent.com/Rukkhadevata-Wisdom/Album/refs/heads/main/att.vtIJriPdJmGkOe2BlUEC5YM-MqU7DiLn0dn9uKV9e10.jpeg"
+];
+
+const container = document.getElementById("container");
+const music = document.getElementById("music");
+
+let index = 0;
+
+function showNextImage() {
+    if (index >= images.length) index = 0;
+
+    const frame = document.createElement("div");
+    frame.className = "frame";
+
+    const img = document.createElement("img");
+    img.src = images[index];
+
+    frame.appendChild(img);
+    container.appendChild(frame);
+
+    setTimeout(() => frame.classList.add("show"), 100);
+    setTimeout(() => frame.classList.add("fade-out"), 2500);
+    setTimeout(() => container.removeChild(frame), 4500);
+
+    index++;
+}
+
+function startExperience() {
+    const startScreen = document.getElementById("startScreen");
+
+    // fade out màn hình start
+    startScreen.style.transition = "opacity 1.5s ease";
+    startScreen.style.opacity = "0";
+
+    setTimeout(() => startScreen.style.display = "none", 1500);
+
+    // phát nhạc
+    music.play();
+
+    // chạy ảnh
+    setInterval(showNextImage, 2000);
+}
+</script>
+
+</body>
+</html>
